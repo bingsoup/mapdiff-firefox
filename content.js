@@ -21,7 +21,7 @@
 
   async function loadSettings() {
     try {
-      const result = await chrome.storage.sync.get(["featureToggles", "heroTagOverrides"]);
+      const result = await window.browserStorage.sync.get(["featureToggles", "heroTagOverrides"]);
       featureToggles = { ...getDefaultToggles(), ...(result.featureToggles || {}) };
       const overrides = result.heroTagOverrides || {};
       HERO_TAGS = { ...D.HERO_TAGS };
@@ -965,8 +965,8 @@
   }
 
   // Listen for live settings changes from popup
-  chrome.storage.onChanged.addListener((changes, area) => {
-    if (area !== "sync") return;
+  window.browserStorage.onChanged.addListener((changes, area) => {
+    if (area !== "sync" && area !== "local") return;
     if (changes.featureToggles || changes.heroTagOverrides) {
       loadSettings().then(() => {
         cleanup();

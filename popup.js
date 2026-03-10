@@ -22,17 +22,17 @@
   // --- Storage ---
 
   async function loadSettings() {
-    const result = await chrome.storage.sync.get(["featureToggles", "heroTagOverrides"]);
+    const result = await window.browserStorage.sync.get(["featureToggles", "heroTagOverrides"]);
     featureToggles = { ...getDefaultToggles(), ...(result.featureToggles || {}) };
     heroTagOverrides = result.heroTagOverrides || {};
   }
 
   function saveToggles() {
-    chrome.storage.sync.set({ featureToggles });
+    window.browserStorage.sync.set({ featureToggles });
   }
 
   function saveTagOverrides() {
-    chrome.storage.sync.set({ heroTagOverrides });
+    window.browserStorage.sync.set({ heroTagOverrides });
   }
 
   // --- Render: Features tab ---
@@ -175,7 +175,7 @@
   function initReset() {
     document.getElementById("reset-tags").addEventListener("click", () => {
       heroTagOverrides = {};
-      chrome.storage.sync.remove("heroTagOverrides");
+      window.browserStorage.sync.remove("heroTagOverrides");
       renderHeroGrid();
     });
   }
